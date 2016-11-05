@@ -42,4 +42,4 @@ import java.util.NoSuchElementException;
         public void setNext(Node next) {
         	this.next = next;
         }
-    }
+    } 

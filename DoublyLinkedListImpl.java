@@ -120,7 +120,7 @@ public class DoublyLinkedListImpl<E> {
     	if (!isEmpty()) {
     		if (current == head) {
     			head = current.getNext();
-    			head.setPrev(null);
+    			current.setPrev(null);
     			System.out.println("delete: " + current.getElement());
     		}
     		else if (current == tail) {
