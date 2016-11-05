@@ -21,13 +21,37 @@ public class Category {
      private PreparedStatement preparedStatement = null;
      private ResultSet resultSet = null;
 	 private String name;
-	public Category (String name) {		
+	 
+	 
+	public Category (String name) throws Exception {		
+		
+		try {
+			 // This will load the MySQL driver, each DB has its own driver
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	        // Setup the connection with the DB
+	        connect = DriverManager
+	                        .getConnection("jdbc:mysql://127.0.0.1:3306/catagories?"
+	                                        + "user=root&password=king");
+	     // Statements allow to issue SQL queries to the database
+            statement = connect.createStatement();
+            
+            preparedStatement = connect
+                    .prepareStatement("create table " + name + " (word VARCHAR(100), definition VARCHAR(1000))");
+//	        preparedStatement.(1, name);
+	        
+	        preparedStatement.executeUpdate();
+	        
+		}
+		catch (Exception e) {
+            throw e;
+            }
+		
 		this.name = name;
 		myList = new DoublyLinkedListImpl<Flashcard>();
 		
 	}
 	
-	public void insert(Flashcard myFlashcard) throws Exception {
+	public void insert(Flashcard myFlashcard, String tableName) throws Exception {
 		try {
 			 // This will load the MySQL driver, each DB has its own driver
 	        Class.forName("com.mysql.cj.jdbc.Driver");
@@ -44,7 +68,7 @@ public class Category {
             writeResultSet(resultSet);
 	        
 	        preparedStatement = connect
-                    .prepareStatement("insert into  catagories.japanese (word, definition) values (?, ?)");
+                    .prepareStatement("insert into  catagories."+ tableName + " (word, definition) values (?, ?)");
 	        preparedStatement.setString(1, myFlashcard.getWord());
 	        preparedStatement.setString(2, myFlashcard.getDefinition());
 	        
@@ -93,7 +117,7 @@ public class Category {
          }
 	 }
 	
-	public void delete(Node<Flashcard> current) throws Exception {
+	public void delete(Node<Flashcard> current, String tableName) throws Exception {
 		try {
 		 // This will load the MySQL driver, each DB has its own driver
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -110,7 +134,7 @@ public class Category {
         writeResultSet(resultSet);
         
         preparedStatement = connect
-                .prepareStatement("delete from  catagories.japanese where word = ?");
+                .prepareStatement("delete from  catagories." + tableName + " where word = ?");
         preparedStatement.setString(1, current.getElement().getWord());
 //        preparedStatement.setString(2, myFlashcard.getDefinition());
         
@@ -153,10 +177,15 @@ public class Category {
 		return myList.getFirst();
 	}
 	
+	public String getName()
+	{
+		return this.name;
+	}
+	
 	public static void main(String args[]) throws Exception
 	{
-//		Category myCategory = new Category ("japanese");
-//		myCategory.insert(new Flashcard ("cat", "animal"));
+//		Category myCategory = new Category ("test1");
+//		myCategory.insert(new Flashcard ("dog", "animal"), "test1");
 //		
 //		myCategory.delete(myCategory.getFirst());
 //		myCategory.insert(new Flashcard ("bbb", "bbb"));
