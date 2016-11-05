@@ -1,25 +1,16 @@
 
 public class Flashcard {
 	
-	private String word;
-	private String definition;
+	private String frontSide;
+	private String backSide;
 	
-	
-	public Flashcard (String word, String definition) {
-		this.word = word;
-		this.definition = definition;
+	public Flashcard (String frontSide, String backSide) {
+		this.frontSide = frontSide;
+		this.backSide = backSide;
 	}	
 	
 	public String toString()
 	{
-		return this.word + " " + this.definition;
-	}
-	
-	public String getWord () {
-		return word;	
-	}
-	
-	public String getDefinition() {
-		return definition;
+		return this.frontSide + " " + this.backSide;
 	}
 }
